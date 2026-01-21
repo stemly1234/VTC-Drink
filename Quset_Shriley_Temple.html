@@ -170,7 +170,7 @@
 
     <div class="content">
         <h1>飲品知識挑戰</h1>
-        <h3>隨機挑戰</h3>
+        <h3>Shriley_Temple</h3>
         <h2>共有 3 條題目</h2>
         <button id="main-btn">開始測驗</button>
     </div>
@@ -191,9 +191,21 @@
 
     <script>
         const questions = [
-            { question: "製作時需要加入多少紅石榴糖漿?", options: ["10 毫升", "20 毫升", "30 毫升", "40 毫升"], answer: "20 毫升" },
-            { question: "Whisky Sour 常用的威士忌種類?", options: ["波本", "黑麥", "愛爾蘭", "蘇格蘭"], answer: "波本" },
-            { question: "Whisky Sour 製作時加入蛋白的作用是?", options: ["增加甜味", "增加泡沫", "降低酒精", "增加顏色"], answer: "增加泡沫" }
+            {
+                question: "製作 Shirley Temple 時通常需要加入多少紅石榴糖漿（grenadine）？（單杯標準份量）",
+                options: ["10 毫升", "15-30 毫升", "40 毫升", "60 毫升"],
+                answer: "15-30 毫升"
+            },
+            {
+                question: "Shirley Temple 最經典的基底汽水是？",
+                options: ["薑汁汽水（Ginger Ale）", "可樂", "柳橙汁", "蘇打水"],
+                answer: "薑汁汽水（Ginger Ale）"
+            },
+            {
+                question: "Shirley Temple 飲料中紅石榴糖漿（grenadine）的主要作用是？",
+                options: ["增加氣泡", "提供甜味與粉紅色澤", "降低甜度", "增加酒精濃度"],
+                answer: "提供甜味與粉紅色澤"
+            }
         ];
 
         let currentQuestion = 0;
