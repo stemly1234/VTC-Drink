@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirley_Temple</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+HK:400,700&display=swap">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans HK', sans-serif;
+            background: #000000;
+            color: #fff;
+            overflow-x: hidden;
+            padding-bottom: 100px;
+        }
+
+        h2 {
+            font-size: 2.5em;
+        }
+
+        h3 {
+            font-size: 1.8em;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 80px;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            z-index: 1000;
+        }
+
+        .nav-bar {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1000px;
+            border-radius: 1rem;
+            height: 50px;
+            min-height: 50px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .nav-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            max-width: 1200px;
+            height: 100%;
+            border-radius: 1rem;
+            background: #333;
+            z-index: -1;
+        }
+
+        .nav-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .nav-button.side-button {
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-button.side-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+            padding: 40px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 500;
+        }
+
+        #drawer.open {
+            transform: translateY(0);
+        }
+
+        #drawer h2 {
+            margin: 20px 0;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .drink-header {
+            position: relative;
+            text-align: center;
+        }
+
+        .drink-header img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 16px;
+            background: rgb(255, 255, 255);
+            color: #000000;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            z-index: 10000;
+            border: 1px solid #000000;
+        }
+
+        .back-btn:hover {
+            background: rgba(78, 51, 51, 0.8);
+        }
+
+        .drink-info {
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            margin: -100px 0 40px 0;
+            padding: 30px 0;
+            box-shadow: 0 8px 20px rgba(184, 170, 170, 0.2);
+            position: relative;
+            z-index: 5;
+        }
+
+        .drink-info .text-left {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            padding: 0 40px;
+            text-align: left;
+            color: #000;
+        }
+
+        .drink-info .video-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .drink-test {
+            background: #000;
+            padding: 40px 100;
+            text-align: center;
+        }
+
+        .drink-test .more-link {
+            background: rgb(48, 47, 47);
+            color: #fff;
+            padding: 30px 150px;
+            border-radius: 0px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: opacity 0.3s ease;
+        }
+
+        .drink-test .more-link:hover {
+            opacity: 0.8;
+        }
+
+        .drink-header {
+            position: relative;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .drink-info h2 {
+            margin-bottom: 16px;
+        }
+
+        .drink-info p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            max-width: 560px;
+            height: 315px;
+            border-radius: 12px;
+        }
+
+        .more-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #FBC2EB 0%, #A6C1EE 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+
+        .more-link:hover {
+            opacity: 0.8;
+        }
+
+        .drink-footer {
+            background: #000;
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        #drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgb(0, 0, 0);
+            color: #fff;
+            padding: 40px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 500;
+        }
+
+        #drawer.open {
+            transform: translateY(0);
+        }
+
+        .drawer-content {
+            margin-top: 100px;
+            margin-left: 25px;
+        }
+
+        #drawer h2 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====返回按鈕 ===== -->
+    <a href="cate.html" class="back-btn">&#8592;</a>
+    <section class="drink-header">
+        <img src="./tea/Shirley_Temple_2005ab4a09.png" alt="Shirley Temple">
+    </section>
+
+    <section class="drink-info">
+        <div class="text-left">
+            <h5>Mocktail</h5>
+            <h2>Shirley Temple</h2>
+            <h3>材料</h3>
+            <ul>
+                <li>30ml 紅石榴糖漿 (Grenadine Syrup)</li>
+                <li>檸檬汽水 (Sprite)</li>
+                <li>裝飾性紅櫻桃 (Maraschino Cherry)</li>
+            </ul>
+            <h3>步驟</h3>
+            <ol>
+                <li>步驟一: 把適量的冰塊加入高球杯 (High Ball Glass) 中</li>
+                <li>步驟二: 以量杯量度 30 毫升紅石榴糖漿 (Grenadine Syrup) 並倒入杯內</li>
+                <li>步驟三: 加入檸檬汽水 (Sprite) 至九分滿</li>
+                <li>步驟四: 以調酒用長柄匙 (Bar Spoon) 攪拌均勻</li>
+                <li>步驟五:插入飲管</li>
+                <li>步驟六:以雞尾酒簽插著裝飾性紅櫻桃 (Maraschino Cherry) 放於杯中</li>
+            </ol>
+            <div class="video-wrapper">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Vq9mAlrScD8"
+                    title="Shirley Temple 影片" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <h3>味道</h3>
+            <h4>Sweet</h4>
+            <h4>來源</h4>
+            <h4>雪莉.登波(Shirley Temple)是一個國際童星/巨星，也是一杯無酒精飲品的名字，在當時被稱為"兒童可以喝的雞尾酒"
+                雪莉登波(Shirley Temple)就是由童星 “Shirley temple" 所命名的，正如她在1986年接受美國國家公共廣播電台(NPR)採訪時說道：「這大概是1930年代中期由The Brown
+                Derby(已於1980歇業)所製作的。」1932年當時四歲的雪莉與家人一同到餐廳用餐，她向母親抱怨:「每次都是喝很俗氣飲料」被餐廳工作的調酒師聽到，所以為她特製的一款看起來很像雞尾酒的飲料，為了讓她可以飲用看起來跟其他大人一樣。也因為這樣，隨著她的名氣高漲，這杯無酒精調飲也跟著傳片全世界。
+            </h4>
+            <h4>Reference from: wiki</h4>
+            <h4>https://shihbar.com/2021/01/30/mocktail-or-virgin-cocktail/</h4>
+        </div>
+    </section>
+    <section class="drink-test">
+        <a href="./Quest.html" class="more-link">測試自己對此飲品的認識</a>
+    </section>
+    <!-- ===== 底===== -->
+    <div class="MuiContainer-root MuiContainer-maxWidthMd nav-wrapper">
+        <div class="MuiBox-root bottom-nav">
+            <div class="MuiBottomNavigation-root nav-bar">
+                <div id="leftBtn"
+                    class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button side-button"
+                    role="button" tabindex="0" aria-label="上一頁">
+                    <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_17_124)">
+                            <path
+                                d="M14.046 6.638l5.833 5.25V21h-2.334v-7h-7v7H8.213v-9.112l5.834-5.25zm0-3.138L2.379 14h3.5v9.333h7v-7h2.333v7h7V14h3.5L14.046 3.5z"
+                                fill="url(#paint0_linear_17_124)"></path>
+                        </g>
+                        <defs>
+                            <linearGradient id="paint0_linear_17_124" x1="2.37878" y1="13.4167" x2="25.7121"
+                                y2="13.4167">
+                                <stop stop-color="#FBC2EB"></stop>
+                                <stop offset="1" stop-color="#A6C1EE"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div id="middleBtn"
+                    class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button"
+                    role="button" tabindex="0" aria-label="開啟選單">
+                    <svg id="closeIcon" class="closeIcon" style="display:none;" width="29" height="28"
+                        viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 6 L22 22 M22 6 L6 22" stroke="#fff" stroke-width="2" />
+                    </svg>
+                </div>
+                <div id="rightBtn"
+                    class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button side-button"
+                    role="button" tabindex="0" aria-label="開啟選單">
+                    <svg class="menuIcon" width="29" height="28" viewBox="0 0 29 28" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_17_127)">
+                            <path d="M4.454 21h21v-2.333h-21V21zm0-5.833h21v-2.334h-21v2.334zm0-8.167v2.333h21V7h-21z"
+                                fill="url(#paint0_linear_17_127)"></path>
+                        </g>
+                        <defs>
+                            <linearGradient id="paint0_linear_17_127" x1="4.45447" y1="14" x2="25.4545" y2="14">
+                                <stop stop-color="#FBC2EB"></stop>
+                                <stop offset="1" stop-color="#A6C1EE"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="drawer">
+        <div class="drawer-content">
+            <button id="closeDrawer" class="sr-only">Close</button>
+            <h5>瀏覽飲品</h5>
+            <h2>Mocktail</h2>
+            <h2>Cocktail</h2>
+            <h2>健康美容提神花茶</h2>
+            <h5>知識複習</h5>
+            <h2>飲品知識挑戰</h2>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#drawer h2').on('click', function () {
+            const category = $(this).text().trim();
+
+            if (['Mocktail', 'Cocktail', '健康美容提神花茶'].includes(category)) {
+                localStorage.setItem('selectedDrink', category);
+                window.location.href = 'cate.html';
+            }
+            else if (category === '飲品知識挑戰') {
+                window.location.href = 'Quest.html';
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#rightBtn").off('click').on('click', function () {
+                $("#drawer").addClass("open");
+                $("#leftBtn, #rightBtn").addClass("hidden");
+                $(".menuIcon").hide();
+                $("#closeIcon").show();
+                $("#middleBtn, #rightBtn").attr('aria-expanded', 'true');
+                $("#drawer").attr('aria-hidden', 'false');
+            });
+
+            $(document).off('click', '#middleBtn').on('click', '#middleBtn', function (e) {
+                if ($("#drawer").hasClass("open")) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    $("#drawer").removeClass("open");
+                    $("#leftBtn, #rightBtn").removeClass("hidden");
+                    $(".menuIcon").show();
+                    $("#closeIcon").hide();
+                    $("#middleBtn, #rightBtn").attr('aria-expanded', 'false');
+                    $("#drawer").attr('aria-hidden', 'true');
+                }
+            });
+
+            $("#closeDrawer").off('click').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                $("#drawer").removeClass("open");
+                $("#leftBtn, #rightBtn").removeClass("hidden");
+                $(".menuIcon").show();
+                $("#closeIcon").hide();
+                $("#middleBtn, #rightBtn").attr('aria-expanded', 'false');
+                $("#drawer").attr('aria-hidden', 'true');
+            });
+            $("#leftBtn").off('click').on('click', function () {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+    <script>document.getElementById('leftBtn').addEventListener('click', function () {
+            window.location.href = 'index.html';
+        });</script>
+</body>
+
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTC Drink</title>
+    <style>
+        @font-face {
+            font-family: 'SaoTorpes';
+            src: url('./font/SaoTorpes.otf') format('opentype');
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Noto Sans HK', sans-serif;
+            background: #111;
+            color: #fff;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        .main-background {
+            min-height: 100vh;
+            background: url('./bg/indexBg.jpg') center/cover no-repeat;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 70vh;
+            margin: 0 auto;
+        }
+
+        .slides-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 100vw;
+            height: 100%;
+            display: block;
+            padding: 0 3vw;
+            pointer-events: auto;
+            overflow: visible;
+            z-index: 15;
+        }
+
+        .slide-item {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 400px;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+            transform-origin: bottom center;
+            transform: translateX(-50%) scale(1) translateX(0) translateY(0) !important;
+        }
+
+        .center {
+            transform: translateX(-50%) scale(1) translateX(0) translateY(5vh) !important;
+            opacity: 1 !important;
+            z-index: 3 !important;
+            pointer-events: auto !important;
+        }
+
+        .left {
+            transform: translateX(-50%) scale(0.5) translateX(calc(-20vw + 550px)) translateY(0vh) !important;
+            opacity: 0.25 !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+        }
+
+        .right {
+            transform: translateX(-50%) scale(0.5) translateX(calc(20vw - 550px)) translateY(0vh) !important;
+            opacity: 0.25 !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .left {
+                transform: translateX(-50%) scale(0.5) translateX(calc(-50vw + 580px)) translateY(0vh) !important;
+            }
+
+            .right {
+                transform: translateX(-50%) scale(0.5) translateX(calc(50vw - 580px)) translateY(0vh) !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .left {
+                transform: translateX(-50%) scale(0.5) translateX(calc(-70vw + 600px)) translateY(0vh) !important;
+            }
+
+            .right {
+                transform: translateX(-50%) scale(0.5) translateX(calc(70vw - 600px)) translateY(0vh) !important;
+            }
+        }
+
+        .slide-item>.MuiBox-root.box-base {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .slide-item.flower-tea-slide.center {
+            transform: translateX(-50%) scale(0.7) translateX(0) translateY(8vh) !important;
+        }
+
+        .product-image {
+            width: 100% !important;
+            max-height: 400px;
+            height: auto !important;
+            object-fit: contain !important;
+            display: block !important;
+            margin: 0 auto !important;
+        }
+
+        .caption-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        svg circle {
+            fill: #FF7817 !important;
+        }
+
+        .title-container {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .title-text {
+            font-family: 'SaoTorpes';
+            font-size: 66px;
+            line-height: 62px;
+            background: linear-gradient(90deg, #FBC2EB, #A6C1EE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 80px;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            z-index: 1000;
+        }
+
+        .nav-bar {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1000px;
+            border-radius: 1rem;
+            height: 50px;
+            min-height: 50px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .nav-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            max-width: 1200px;
+            height: 100%;
+            border-radius: 1rem;
+            background: #333;
+            z-index: -1;
+        }
+
+        .nav-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .nav-button.side-button {
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-button.side-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgb(0, 0, 0);
+            color: #fff;
+            padding: 40px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 500;
+        }
+
+        #drawer.open {
+            transform: translateY(0);
+        }
+
+        .drawer-content {
+            margin-top: 0px;
+            margin-left: 25px;
+        }
+
+        #drawer h2 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="__next">
+        <div class="Toastify"></div>
+        <div class="MuiContainer-root MuiContainer-disableGutters app-container">
+            <div class="MuiBox-root box-base" align="center">
+                <div class="MuiBox-root main-background">
+                    <div class="MuiBox-root box-base">
+                        <div class="MuiBox-root carousel-container">
+                            <div class="slides-container">
+                                <!-- 圖1 -->
+                                <div class="slide-item">
+                                    <div class="MuiBox-root box-base">
+                                        <img class="MuiBox-root product-image" src="./image/3_4a16c053a8.png"
+                                            alt="Cocktail">
+                                        <div class="MuiStack-root caption-container">
+                                            <span
+                                                class="MuiTypography-root MuiTypography-caption MuiTypography-alignCenter caption-text">Cocktail</span>
+                                            <svg width="5" height="5" viewBox="0 0 13 13" fill="#FF7817">
+                                                <circle cx="6.5" cy="6.5" r="6.5"></circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 圖2 -->
+                                <div class="slide-item">
+                                    <div class="MuiBox-root box-base">
+                                        <img class="MuiBox-root product-image" src="./image/1_92fdb89137.png"
+                                            alt="Mocktail">
+                                        <div class="MuiStack-root caption-container">
+                                            <span
+                                                class="MuiTypography-root MuiTypography-caption MuiTypography-alignCenter caption-text">Mocktail</span>
+                                            <svg width="5" height="5" viewBox="0 0 13 13" fill="#FF7817">
+                                                <circle cx="6.5" cy="6.5" r="6.5"></circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 圖3 -->
+                                <div class="slide-item flower-tea-slide">
+                                    <div class="MuiBox-root box-base">
+                                        <img class="MuiBox-root product-image" src="./image/_f6835d836c.png"
+                                            alt="健康美容提神花茶">
+                                        <div class="MuiStack-root caption-container">
+                                            <span
+                                                class="MuiTypography-root MuiTypography-caption MuiTypography-alignCenter caption-text">健康美容提神花茶</span>
+                                            <svg width="5" height="5" viewBox="0 0 13 13" fill="#FF7817">
+                                                <circle cx="6.5" cy="6.5" r="6.5"></circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="MuiBox-root title-container">
+                            <span
+                                class="MuiTypography-root MuiTypography-special_title MuiTypography-alignCenter title-text">JOLLY
+                                JUICES</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底 -->
+            <div class="MuiContainer-root MuiContainer-maxWidthMd nav-wrapper">
+                <div class="MuiBox-root bottom-nav">
+                    <div class="MuiBottomNavigation-root nav-bar">
+                        <div id="leftBtn"
+                            class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button side-button"
+                            role="button" tabindex="0" aria-label="上一頁">
+                            <svg width="29" height="28" viewBox="0 0 29 28" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_17_124)">
+                                    <path
+                                        d="M14.046 6.638l5.833 5.25V21h-2.334v-7h-7v7H8.213v-9.112l5.834-5.25zm0-3.138L2.379 14h3.5v9.333h7v-7h2.333v7h7V14h3.5L14.046 3.5z"
+                                        fill="url(#paint0_linear_17_124)"></path>
+                                </g>
+                                <defs>
+                                    <linearGradient id="paint0_linear_17_124" x1="2.37878" y1="13.4167" x2="25.7121"
+                                        y2="13.4167">
+                                        <stop stop-color="#FBC2EB"></stop>
+                                        <stop offset="1" stop-color="#A6C1EE"></stop>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div id="middleBtn"
+                            class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button"
+                            role="button" tabindex="0" aria-label="開啟選單">
+                            <svg id="closeIcon" class="closeIcon" style="display:none;" width="29" height="28"
+                                viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 6 L22 22 M22 6 L6 22" stroke="#fff" stroke-width="2" />
+                            </svg>
+                        </div>
+                        <div id="rightBtn"
+                            class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button side-button"
+                            role="button" tabindex="0" aria-label="開啟選單">
+                            <svg class="menuIcon" width="29" height="28" viewBox="0 0 29 28" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_17_127)">
+                                    <path
+                                        d="M4.454 21h21v-2.333h-21V21zm0-5.833h21v-2.334h-21v2.334zm0-8.167v2.333h21V7h-21z"
+                                        fill="url(#paint0_linear_17_127)"></path>
+                                </g>
+                                <defs>
+                                    <linearGradient id="paint0_linear_17_127" x1="4.45447" y1="14" x2="25.4545" y2="14">
+                                        <stop stop-color="#FBC2EB"></stop>
+                                        <stop offset="1" stop-color="#A6C1EE"></stop>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="drawer">
+        <div class="drawer-content">
+            <button id="closeDrawer" class="sr-only">Close</button>
+            <h5>瀏覽飲品</h5>
+            <h2>Mocktail</h2>
+            <h2>Cocktail</h2>
+            <h2>健康美容提神花茶</h2>
+            <h5>知識複習</h5>
+            <h2>飲品知識挑戰</h2>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#drawer h2').on('click', function () {
+            const category = $(this).text().trim();
+
+            if (['Mocktail', 'Cocktail', '健康美容提神花茶'].includes(category)) {
+                localStorage.setItem('selectedDrink', category);
+                window.location.href = 'cate.html';
+            }
+            else if (category === '飲品知識挑戰') {
+                window.location.href = 'Quest.html';
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#rightBtn").off('click').on('click', function () {
+                $("#drawer").addClass("open");
+                $("#leftBtn, #rightBtn").addClass("hidden");
+                $(".menuIcon").hide();
+                $("#closeIcon").show();
+                $("#middleBtn, #rightBtn").attr('aria-expanded', 'true');
+                $("#drawer").attr('aria-hidden', 'false');
+            });
+
+            $(document).off('click', '#middleBtn').on('click', '#middleBtn', function (e) {
+                if ($("#drawer").hasClass("open")) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    $("#drawer").removeClass("open");
+                    $("#leftBtn, #rightBtn").removeClass("hidden");
+                    $(".menuIcon").show();
+                    $("#closeIcon").hide();
+                    $("#middleBtn, #rightBtn").attr('aria-expanded', 'false');
+                    $("#drawer").attr('aria-hidden', 'true');
+                }
+            });
+
+            $("#closeDrawer").off('click').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                $("#drawer").removeClass("open");
+                $("#leftBtn, #rightBtn").removeClass("hidden");
+                $(".menuIcon").show();
+                $("#closeIcon").hide();
+                $("#middleBtn, #rightBtn").attr('aria-expanded', 'false');
+                $("#drawer").attr('aria-hidden', 'true');
+            });
+            $("#leftBtn").off('click').on('click', function () {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+    <script>
+        const $slides = $(".slide-item");
+        const total = $slides.length;
+        let current = 1;
+
+        function updatePositions() {
+            $slides.removeClass('center left right');
+            setTimeout(() => {
+                $slides.each(function (index) {
+                    const pos = (index - current + total) % total;
+                    if (pos === 0) $(this).addClass('center');
+                    else if (pos === 1) $(this).addClass('right');
+                    else $(this).addClass('left');
+                });
+            }, 10);
+        }
+
+        function nextSlide() {
+            current = (current + 1) % total;
+            updatePositions();
+        }
+
+        function prevSlide() {
+            current = (current - 1 + total) % total;
+            updatePositions();
+        }
+
+        $('#leftBtn, #middleBtn, #rightBtn').on('touchstart touchend', function (e) {
+            e.stopPropagation();
+        });
+
+        let startX = 0;
+        $(".slides-container")
+            .on("touchstart", function (e) {
+                startX = e.originalEvent.touches[0].clientX;
+            })
+            .on("touchend", function (e) {
+                if (!startX) return;
+                const endX = e.originalEvent.changedTouches[0].clientX;
+                const diff = endX - startX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) prevSlide();
+                    else nextSlide();
+                }
+                startX = 0;
+            });
+
+        updatePositions();
+        $slides.each(function () { void this.offsetWidth; });
+
+
+    </script>
+    <script>document.getElementById('leftBtn').addEventListener('click', function () {
+            window.location.href = 'index.html';
+        });
+    </script>
+    <script>
+        $(".slide-item").on("click", function () {
+            const drinkName = $(this).find(".caption-text").text().trim();
+            localStorage.setItem("selectedDrink", drinkName);
+            window.location.href = "cate.html";
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiskey Sour</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+HK:400,700&display=swap">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans HK', sans-serif;
+            background: #000000;
+            color: #fff;
+            overflow-x: hidden;
+            padding-bottom: 100px;
+        }
+
+        h2 {
+            font-size: 2.5em;
+        }
+
+        h3 {
+            font-size: 1.8em;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 80px;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            z-index: 1000;
+        }
+
+        .nav-bar {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1000px;
+            border-radius: 1rem;
+            height: 50px;
+            min-height: 50px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .nav-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            max-width: 1200px;
+            height: 100%;
+            border-radius: 1rem;
+            background: #333;
+            z-index: -1;
+        }
+
+        .nav-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .nav-button.side-button {
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-button.side-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+            padding: 40px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 500;
+        }
+
+        #drawer.open {
+            transform: translateY(0);
+        }
+
+        #drawer h2 {
+            margin: 20px 0;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .drink-header {
+            position: relative;
+            text-align: center;
+        }
+
+        .drink-header img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 16px;
+            background: rgb(255, 255, 255);
+            color: #000000;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            z-index: 10000;
+            border: 1px solid #000000;
+        }
+
+        .back-btn:hover {
+            background: rgba(78, 51, 51, 0.8);
+        }
+
+        .drink-info {
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            margin: -100px 0 40px 0;
+            padding: 30px 0;
+            box-shadow: 0 8px 20px rgba(184, 170, 170, 0.2);
+            position: relative;
+            z-index: 5;
+        }
+
+        .drink-info .text-left {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            padding: 0 40px;
+            text-align: left;
+            color: #000;
+        }
+
+        .drink-info .video-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .drink-test {
+            background: #000;
+            padding: 40px 100;
+            text-align: center;
+        }
+
+        .drink-test .more-link {
+            background: rgb(48, 47, 47);
+            color: #fff;
+            padding: 30px 150px;
+            border-radius: 0px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: opacity 0.3s ease;
+        }
+
+        .drink-test .more-link:hover {
+            opacity: 0.8;
+        }
+
+        .drink-header {
+            position: relative;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .drink-info h2 {
+            margin-bottom: 16px;
+        }
+
+        .drink-info p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            max-width: 560px;
+            height: 315px;
+            border-radius: 12px;
+        }
+
+        .more-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #FBC2EB 0%, #A6C1EE 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+
+        .more-link:hover {
+            opacity: 0.8;
+        }
+
+        .drink-footer {
+            background: #000;
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        #drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgb(0, 0, 0);
+            color: #fff;
+            padding: 40px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 500;
+        }
+
+        #drawer.open {
+            transform: translateY(0);
+        }
+
+        .drawer-content {
+            margin-top: 100px;
+            margin-left: 25px;
+        }
+
+        #drawer h2 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====返回按鈕 ===== -->
+    <a href="cate.html" class="back-btn">&#8592;</a>
+    <section class="drink-header">
+        <img src="./tea/removebg_preview_788090a9bd.png" alt="Shirley Temple">
+    </section>
+
+    <section class="drink-info">
+        <div class="text-left">
+            <h5>健康美容提神花茶</h5>
+            <h2>洛神蝶豆花清熱美容茶
+            </h2>
+            <h3>材料</h3>
+            <ul>
+                <li>蝶豆花 x 2克</li>
+                <li>洛神花 x 5克</li>
+                <li>Over 90度熱水x 1000毫升</li>
+            </ul>
+            <h3>步驟</h3>
+            <ol>
+                <li> 將洛神花 和 蝶豆花 各自加入1000毫升水中煮至沸騰 泡煮5分鐘:</li>
+                <li>洛神花將會變成紅色,蝶豆花將會變成藍色</li>
+                <li>步驟2: 將紅色洛神花水及藍色蝶豆花水以1:1的比例混合一起; 就會變成紫色的洛神蝶豆花清熱美容茶</li>
+                <li>以量杯量度 30 毫升新鮮檸檬汁 (Fresh Lemon Juice)
+                    並倒入不鏽鋼杯內</li>
+                <li>步驟3:開始跟花茶拍網美照</li>
+            </ol>
+            <div class="video-wrapper">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Zg3riHjTKFo"
+                    title="Shirley Temple 影片" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <h3>營養</h3>
+            <ul>
+                <li>維生素C : 18.4mg</li>
+                <li>熱量 : 37(kcal)</li>
+                <li>脂肪 : 0.7g</li>
+                <li>膽固醇 : 0 mg</li>
+                <li>鈉 : 3 mg</li>
+                <li>鉀 : 9 mg</li>
+                <li>碳水化合物 : 7g</li>
+                <li>蛋白質 : 0.4 g</li>
+                <li>維他命C : 18.4mg</li>
+                <li>鐵 : 8.6 mg</li>
+                <li>鎂 : 1mg</li>
+                <li>鈣 : 1mg</li>
+            </ul>
+            <h3>味道</h3>
+            <ul>
+                <li>酸甜滋味</li>
+            </ul>
+            <h3>來源</h3>
+            <h2>1. 洛神花茶</h2>
+            <p><strong>介紹：</strong>洛神花原產地為非洲的迦納，歷史學家相信它的種子是跟著奴隸船來到中南美洲，在當地落地生根。每年的收成期為十一月至十二月，或許這也是它成為聖誕節、年末飲品的原因之一。</p>
+
+            <p><strong>歷史文化：</strong>說到「洛神」，有人會想到三國曹植所作的〈洛神賦〉：「翩若驚鴻，婉若遊龍。榮曜秋菊，華茂春松。」這首詩描寫的是伏羲氏的女兒，也就是大家稱的洛神宓妃。不過，更多人會聯想到的是常被用來製作飲料的洛神花。其實洛神花與曹植〈洛神賦〉所描寫的洛神無關，洛神花的名稱來自英文
+                <em>Roselle</em> 的音譯，意譯為「玫瑰茄」。其他別名包括：洛神葵、洛花、洛濟葵、紅葵、紅角葵、萼葵、葵萼果等。
+            </p>
+
+            <p><strong>植物特性：</strong>洛神花屬錦葵科，是一年生木質草本植物，以紅色花萼聞名，常用於製作飲料。喜高溫，適合生長溫度為攝氏 24–32 度，一般春季播種，秋季開花，冬季 11–12
+                月為採收期。</p>
+
+            <p><strong>營養與功效：</strong></p>
+            <ul>
+                <li>抗高血壓</li>
+                <li>利尿性質</li>
+                <li>含有大量天然抗氧化劑，如維生素 C 和花青素</li>
+                <li>幫助腸胃消化、調整女性生理週期、美容保養</li>
+            </ul>
+
+            <p><strong>製作方法：</strong>一般製作洛神花茶的步驟，是先將曬乾的洛神花在水中煮沸，水形成深紅色後，在食用前加上糖或蜂蜜將其甜化，再置冰箱冷藏後即可飲用。</p>
+
+            <h2>2. 蝶豆花茶</h2>
+            <p><strong>介紹：</strong>蝶豆花非常賞心悅目，夢幻藍色或紫色的嬌嫩花瓣中心帶有少許亮黃色。原生於東南亞，當地溫暖環境有助其生長。蝶豆花的藍色花瓣可用作花茶與烹飪材料：放入溫熱水中會散發出漂亮的藍色，成為天然色素。蝶豆花也是天然石蕊，與酸性接觸時會變色。
+            </p>
+
+            <p><strong>烹飪用途：</strong>在東南亞，蝶豆花長久以來是泰式、馬來和娘惹料理中的天然食用色素。花瓣幾乎沒有味道，不影響食物風味，作為茶飲則帶淡淡木香與土味。
+                在泰國稱為 <em>dok anchan</em>，可切成細絲加入米飯沙律，或萃取藍色液體用來蒸飯。許多泰國度假村以蝶豆花和香茅製作迎賓飲料。傳統泰式小點如魚肉蒸餃（chaw muang
+                dumplings）和淡紫色千層糕（khanom chan）顏色都來自蝶豆花精華。星馬地區，馬來名稱為 <em>bunga telang</em>，廣泛使用於藍花飯（nasi
+                kerabu）、椰絲糯米飯（pulut
+                inti）、蘭花咖央糯米糕（kuih tekan / pulut tai tai）等。</p>
+
+            <p><strong>營養與醫療用途：</strong></p>
+            <ul>
+                <li>提高腦力、抗抑鬱、鎮定</li>
+                <li>可平定情緒，不含咖啡因，抗氧化作用類似綠茶</li>
+                <li>含豐富花青素，刺激膠原蛋白合成，減少老化痕跡，讓皮膚青春煥發</li>
+                <li>抗炎與止痛，有助消除疼痛、退燒</li>
+                <li>通血路及通經效果，孕婦及月經期女性忌用</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ===== 底===== -->
+    <div class="MuiContainer-root MuiContainer-maxWidthMd nav-wrapper">
+        <div class="MuiBox-root bottom-nav">
+            <div class="MuiBottomNavigation-root nav-bar">
+                <div id="leftBtn"
+                    class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button side-button"
+                    role="button" tabindex="0" aria-label="上一頁">
+                    <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_17_124)">
+                            <path
+                                d="M14.046 6.638l5.833 5.25V21h-2.334v-7h-7v7H8.213v-9.112l5.834-5.25zm0-3.138L2.379 14h3.5v9.333h7v-7h2.333v7h7V14h3.5L14.046 3.5z"
+                                fill="url(#paint0_linear_17_124)"></path>
+                        </g>
+                        <defs>
+                            <linearGradient id="paint0_linear_17_124" x1="2.37878" y1="13.4167" x2="25.7121"
+                                y2="13.4167">
+                                <stop stop-color="#FBC2EB"></stop>
+                                <stop offset="1" stop-color="#A6C1EE"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div id="middleBtn"
+                    class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button"
+                    role="button" tabindex="0" aria-label="開啟選單">
+                    <svg id="closeIcon" class="closeIcon" style="display:none;" width="29" height="28"
+                        viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 6 L22 22 M22 6 L6 22" stroke="#fff" stroke-width="2" />
+                    </svg>
+                </div>
+                <div id="rightBtn"
+                    class="MuiButtonBase-root MuiBottomNavigationAction-root MuiBottomNavigationAction-iconOnly nav-button side-button"
+                    role="button" tabindex="0" aria-label="開啟選單">
+                    <svg class="menuIcon" width="29" height="28" viewBox="0 0 29 28" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_17_127)">
+                            <path d="M4.454 21h21v-2.333h-21V21zm0-5.833h21v-2.334h-21v2.334zm0-8.167v2.333h21V7h-21z"
+                                fill="url(#paint0_linear_17_127)"></path>
+                        </g>
+                        <defs>
+                            <linearGradient id="paint0_linear_17_127" x1="4.45447" y1="14" x2="25.4545" y2="14">
+                                <stop stop-color="#FBC2EB"></stop>
+                                <stop offset="1" stop-color="#A6C1EE"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="drawer">
+        <div class="drawer-content">
+            <button id="closeDrawer" class="sr-only">Close</button>
+            <h5>瀏覽飲品</h5>
+            <h2>Mocktail</h2>
+            <h2>Cocktail</h2>
+            <h2>健康美容提神花茶</h2>
+            <h5>知識複習</h5>
+            <h2>飲品知識挑戰</h2>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#drawer h2').on('click', function () {
+            const category = $(this).text().trim();
+
+            if (['Mocktail', 'Cocktail', '健康美容提神花茶'].includes(category)) {
+                localStorage.setItem('selectedDrink', category);
+                window.location.href = 'cate.html';
+            }
+            else if (category === '飲品知識挑戰') {
+                window.location.href = 'Quest.html';
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#rightBtn").off('click').on('click', function () {
+                $("#drawer").addClass("open");
+                $("#leftBtn, #rightBtn").addClass("hidden");
+                $(".menuIcon").hide();
+                $("#closeIcon").show();
+                $("#middleBtn, #rightBtn").attr('aria-expanded', 'true');
+                $("#drawer").attr('aria-hidden', 'false');
+            });
+
+            $(document).off('click', '#middleBtn').on('click', '#middleBtn', function (e) {
+                if ($("#drawer").hasClass("open")) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    $("#drawer").removeClass("open");
+                    $("#leftBtn, #rightBtn").removeClass("hidden");
+                    $(".menuIcon").show();
+                    $("#closeIcon").hide();
+                    $("#middleBtn, #rightBtn").attr('aria-expanded', 'false');
+                    $("#drawer").attr('aria-hidden', 'true');
+                }
+            });
+
+            $("#closeDrawer").off('click').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                $("#drawer").removeClass("open");
+                $("#leftBtn, #rightBtn").removeClass("hidden");
+                $(".menuIcon").show();
+                $("#closeIcon").hide();
+                $("#middleBtn, #rightBtn").attr('aria-expanded', 'false');
+                $("#drawer").attr('aria-hidden', 'true');
+            });
+            $("#leftBtn").off('click').on('click', function () {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+    <script>document.getElementById('leftBtn').addEventListener('click', function () {
+            window.location.href = 'index.html';
+        });</script>
+</body>
+
+</html>
