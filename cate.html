@@ -87,8 +87,8 @@
         }
 
         .grid-item {
-            flex: 0 0 calc(50% - 20px);
-            max-width: calc(50% - 20px);
+            flex: 0 0 calc(25% - 20px);
+            max-width: calc(25% - 20px);
             text-align: center;
             text-decoration: none;
             color: inherit;
@@ -236,6 +236,13 @@
         .grid-item:visited {
             color: inherit;
         }
+
+        @media (max-width: 768px) {
+            .grid-item {
+                flex: 0 0 calc(50% - 20px);
+                max-width: calc(50% - 20px);
+            }
+        }
     </style>
 </head>
 
@@ -377,7 +384,7 @@
             }
         });
     </script>
-     <script>
+    <script>
         $(document).ready(function () {
             $("#rightBtn").off('click').on('click', function () {
                 $("#drawer").addClass("open");
